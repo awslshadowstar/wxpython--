@@ -1,15 +1,63 @@
 import wx
 import wx.adv
 import random
+from PIL import Image
+
+ID_EASY = wx.NewId()
+ID_NORMAL = wx.NewId()
+ID_HARD = wx.NewId()
+ID_LUNATIC = wx.NewId()
+diffchoice = "NORMOL"
 
 
 class Tetris(wx.Frame):
 
     def __init__(self, parent):
-        wx.Frame.__init__(self, parent, size=(180, 380),
+        wx.Frame.__init__(self, parent, size=(360, 760),
                           style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER ^ wx.MAXIMIZE_BOX)
-
+        self.InitUI()
         self.initFrame()
+
+    def InitUI(self):
+
+        menubar = wx.MenuBar()
+        fileMenu = wx.Menu()
+        fileItem1 = fileMenu.Append(ID_EASY, 'EASY')
+        fileItem2 = fileMenu.Append(ID_NORMAL, 'NORMAL')
+        fileItem3 = fileMenu.Append(ID_HARD, 'HARD')
+        fileItem4 = fileMenu.Append(ID_LUNATIC, 'LUNATIC')
+
+        menubar.Append(fileMenu, '&Difficuity')
+
+        self.Bind(wx.EVT_MENU, self.difficuity, fileItem1)
+        self.Bind(wx.EVT_MENU, self.difficuity, fileItem2)
+        self.Bind(wx.EVT_MENU, self.difficuity, fileItem3)
+        self.Bind(wx.EVT_MENU, self.difficuity, fileItem4)
+
+        helpmenu = wx.Menu()
+        helpItem = helpmenu.Append(wx.ID_ANY, 'help')
+        menubar.Append(helpmenu, 'help')
+        self.Bind(wx.EVT_MENU, self.morehelp, helpItem)
+        self.SetMenuBar(menubar)
+
+    def difficuity(self, e):
+        eid = e.GetId()
+        if eid == ID_EASY:
+            Board.Speed = 500
+            diffchoice = "EASY"
+            self.SetTitle("Tetris "+diffchoice+" MODE")
+        elif eid == ID_NORMAL:
+            Board.Speed = 300
+            diffchoice = "NORMAL"
+            self.SetTitle("Tetris "+diffchoice+" MODE")
+        elif eid == ID_HARD:
+            Board.Speed = 200
+            diffchoice = "HARD"
+            self.SetTitle("Tetris "+diffchoice+" MODE")
+        elif eid == ID_LUNATIC:
+            Board.Speed = 50
+            diffchoice = "LUNATIC"
+            self.SetTitle("Tetris "+diffchoice+" MODE")
 
     def initFrame(self):
 
@@ -20,8 +68,22 @@ class Tetris(wx.Frame):
         self.board.start()
         self.board.help()
 
-        self.SetTitle("Tetris")
+        self.SetTitle("Tetris "+diffchoice+" MODE")
         self.Centre()
+
+    def morehelp(self, e):
+        msg = ''' 俄罗斯方块粗制版
+        单击difficuty选择难度
+        按键介绍：
+        A：向左
+        D：向右
+        W：翻转
+        S：加速下落
+        SPACE：直接到达底部
+        P：开始/暂停/解出暂停
+        '''
+        wx.MessageBox(msg, '玩法介绍',
+                      wx.OK | wx.ICON_INFORMATION)
 
 
 class Board(wx.Panel):
@@ -114,7 +176,7 @@ class Board(wx.Panel):
         if self.isPaused:
             self.timer.Stop()
             statusbar.SetStatusText(
-                'enter h to get help')
+                'enter L to get licence')
         else:
             self.timer.Start(Board.Speed)
             statusbar.SetStatusText(str(self.numLinesRemoved))
@@ -126,7 +188,8 @@ class Board(wx.Panel):
 
     def OnAboutBox(self):
 
-        description = """美少女俄罗斯方块，带福利的那种
+        description = """俄罗斯方块粗制版，超过20分有福利(正经向)
+        点击菜单栏的难度和帮助选择难度查看难度和规则
         """
 
         licence = """手签license，你值得拥有
@@ -134,11 +197,11 @@ class Board(wx.Panel):
 
         info = wx.adv.AboutDialogInfo()
 
-        info.SetIcon(wx.Icon('./icon/icon.png', wx.BITMAP_TYPE_PNG))
-        info.SetName('万花镜')
+        info.SetIcon(wx.Icon('./ico/icon.png', wx.BITMAP_TYPE_PNG))
+        info.SetName('万华镜')
         info.SetVersion('1.0')
         info.SetDescription(description)
-        info.SetCopyright('(C) 2020 - 2020 July Bodnar')
+        info.SetCopyright('(C) 2020 - 2020 July Shen')
         info.SetWebSite('https://github.com/awsl1784597340')
         info.SetLicence(licence)
         info.AddDeveloper('Shadowstar Shen')
@@ -194,7 +257,7 @@ class Board(wx.Panel):
             self.pause()
             return
 
-        if keycode == ord('H') or keycode == ord('h'):
+        if keycode == ord('l') or keycode == ord('L'):
             self.gethelp()
             return
 
@@ -311,6 +374,15 @@ class Board(wx.Panel):
             self.timer.Stop()
             self.isStarted = False
             statusbar.SetStatusText('Game over')
+            if self.numLinesRemoved >= 20:
+                wx.MessageBox('恭喜恭喜，老绅士了！', '恭喜',
+                              wx.OK | wx.ICON_INFORMATION)
+                num = random.randint(1, 6)
+                image = Image.open('./ico/image{}.jpg'.format(num))
+                image.show()
+            else:
+                wx.MessageBox('你太菜了，哪来的福利?再见！', '哈哈哈哈哈',
+                              wx.OK | wx.ICON_INFORMATION)
 
     def tryMove(self, newPiece, newX, newY):
 
