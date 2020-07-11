@@ -40,6 +40,9 @@ class Tetris(wx.Frame):
         self.Bind(wx.EVT_MENU, self.morehelp, helpItem)
         self.SetMenuBar(menubar)
 
+        self.icon = wx.Icon('./ico/icon.ico', wx.BITMAP_TYPE_ICO)
+        self.SetIcon(self.icon)
+
     def difficuity(self, e):
         eid = e.GetId()
         if eid == ID_EASY:
@@ -72,15 +75,18 @@ class Tetris(wx.Frame):
         self.Centre()
 
     def morehelp(self, e):
-        msg = ''' 俄罗斯方块粗制版
-        单击difficuty选择难度
+        msg = '''
+        俄罗斯方块 by shadowstar
+        共计六张福利图
+        单击Difficuty选择难度
         按键介绍：
         A：向左
         D：向右
         W：翻转
         S：加速下落
         SPACE：直接到达底部
-        P：开始/暂停/解出暂停
+        P：开始/暂停/解除暂停
+        注意：请在暂停模式下选择难度否则无法生效
         '''
         wx.MessageBox(msg, '玩法介绍',
                       wx.OK | wx.ICON_INFORMATION)
