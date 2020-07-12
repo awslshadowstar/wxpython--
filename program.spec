@@ -1,12 +1,11 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 block_cipher = None
-add_files=[("ico\\icon.png","."),("ico\\image1.jpg","."),("ico\\image2.jpg","."),("ico\\image3.jpg","."),("ico\\image4.jpg","."),("ico\\image5.jpg","."),("ico\\image6.jpg",".")]
 
 a = Analysis(['program.py'],
              pathex=['D:\\美少女俄罗斯方块'],
              binaries=[],
-             datas=add_files,
+             datas=[('ico','ico')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -30,4 +29,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=True , icon='ico\\icon.ico')
+          console=False , icon='ico\\icon.ico')

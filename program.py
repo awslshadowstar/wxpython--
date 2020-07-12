@@ -7,7 +7,7 @@ ID_EASY = wx.NewId()
 ID_NORMAL = wx.NewId()
 ID_HARD = wx.NewId()
 ID_LUNATIC = wx.NewId()
-diffchoice = "NORMOL"
+diffchoice = "NORMAL"
 
 
 class Tetris(wx.Frame):
