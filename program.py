@@ -40,7 +40,7 @@ class Tetris(wx.Frame):
         self.Bind(wx.EVT_MENU, self.morehelp, helpItem)
         self.SetMenuBar(menubar)
 
-        self.icon = wx.Icon('./ico/icon.ico', wx.BITMAP_TYPE_ICO)
+        self.icon = wx.Icon('ico/icon.ico', wx.BITMAP_TYPE_ICO)
         self.SetIcon(self.icon)
 
     def difficuity(self, e):
@@ -384,7 +384,7 @@ class Board(wx.Panel):
                 wx.MessageBox('恭喜恭喜，老绅士了！', '恭喜',
                               wx.OK | wx.ICON_INFORMATION)
                 num = random.randint(1, 6)
-                image = Image.open('./ico/image{}.jpg'.format(num))
+                image = Image.open('ico/image{}.jpg'.format(num))
                 image.show()
             else:
                 wx.MessageBox('你太菜了，哪来的福利?再见！', '哈哈哈哈哈',
